@@ -1,12 +1,12 @@
 import XCTest
-import SQLite
+import SQLiteSwift
 
 // https://github.com/stephencelis/SQLite.swift/issues/1071
 #if !os(Linux)
 
 class CustomFunctionNoArgsTests: SQLiteTestCase {
-    typealias FunctionNoOptional              = () -> Expression<String>
-    typealias FunctionResultOptional          = () -> Expression<String?>
+    typealias FunctionNoOptional              = () -> SQLiteSwift.Expression<String>
+    typealias FunctionResultOptional          = () -> SQLiteSwift.Expression<String?>
 
     func testFunctionNoOptional() throws {
         let _: FunctionNoOptional = try db.createFunction("test", deterministic: true) {
@@ -26,10 +26,10 @@ class CustomFunctionNoArgsTests: SQLiteTestCase {
 }
 
 class CustomFunctionWithOneArgTests: SQLiteTestCase {
-    typealias FunctionNoOptional              = (Expression<String>) -> Expression<String>
-    typealias FunctionLeftOptional            = (Expression<String?>) -> Expression<String>
-    typealias FunctionResultOptional          = (Expression<String>) -> Expression<String?>
-    typealias FunctionLeftResultOptional      = (Expression<String?>) -> Expression<String?>
+    typealias FunctionNoOptional              = (SQLiteSwift.Expression<String>) -> SQLiteSwift.Expression<String>
+    typealias FunctionLeftOptional            = (SQLiteSwift.Expression<String?>) -> SQLiteSwift.Expression<String>
+    typealias FunctionResultOptional          = (SQLiteSwift.Expression<String>) -> SQLiteSwift.Expression<String?>
+    typealias FunctionLeftResultOptional      = (SQLiteSwift.Expression<String?>) -> SQLiteSwift.Expression<String?>
 
     func testFunctionNoOptional() throws {
         let _: FunctionNoOptional = try db.createFunction("test", deterministic: true) { a in
@@ -65,14 +65,14 @@ class CustomFunctionWithOneArgTests: SQLiteTestCase {
 }
 
 class CustomFunctionWithTwoArgsTests: SQLiteTestCase {
-    typealias FunctionNoOptional              = (Expression<String>, Expression<String>) -> Expression<String>
-    typealias FunctionLeftOptional            = (Expression<String?>, Expression<String>) -> Expression<String>
-    typealias FunctionRightOptional           = (Expression<String>, Expression<String?>) -> Expression<String>
-    typealias FunctionResultOptional          = (Expression<String>, Expression<String>) -> Expression<String?>
-    typealias FunctionLeftRightOptional       = (Expression<String?>, Expression<String?>) -> Expression<String>
-    typealias FunctionLeftResultOptional      = (Expression<String?>, Expression<String>) -> Expression<String?>
-    typealias FunctionRightResultOptional     = (Expression<String>, Expression<String?>) -> Expression<String?>
-    typealias FunctionLeftRightResultOptional = (Expression<String?>, Expression<String?>) -> Expression<String?>
+    typealias FunctionNoOptional              = (SQLiteSwift.Expression<String>, SQLiteSwift.Expression<String>) -> SQLiteSwift.Expression<String>
+    typealias FunctionLeftOptional            = (SQLiteSwift.Expression<String?>, SQLiteSwift.Expression<String>) -> SQLiteSwift.Expression<String>
+    typealias FunctionRightOptional           = (SQLiteSwift.Expression<String>, SQLiteSwift.Expression<String?>) -> SQLiteSwift.Expression<String>
+    typealias FunctionResultOptional          = (SQLiteSwift.Expression<String>, SQLiteSwift.Expression<String>) -> SQLiteSwift.Expression<String?>
+    typealias FunctionLeftRightOptional       = (SQLiteSwift.Expression<String?>, SQLiteSwift.Expression<String?>) -> SQLiteSwift.Expression<String>
+    typealias FunctionLeftResultOptional      = (SQLiteSwift.Expression<String?>, SQLiteSwift.Expression<String>) -> SQLiteSwift.Expression<String?>
+    typealias FunctionRightResultOptional     = (SQLiteSwift.Expression<String>, SQLiteSwift.Expression<String?>) -> SQLiteSwift.Expression<String?>
+    typealias FunctionLeftRightResultOptional = (SQLiteSwift.Expression<String?>, SQLiteSwift.Expression<String?>) -> SQLiteSwift.Expression<String?>
 
     func testNoOptional() throws {
         let _: FunctionNoOptional = try db.createFunction("test", deterministic: true) { a, b in

@@ -1,5 +1,5 @@
 import XCTest
-@testable import SQLite
+@testable import SQLiteSwift
 
 class CoreFunctionsTests: XCTestCase {
 
@@ -12,8 +12,8 @@ class CoreFunctionsTests: XCTestCase {
     }
 
     func test_random_generatesExpressionWithRandomFunction() {
-        assertSQL("random()", Expression<Int64>.random())
-        assertSQL("random()", Expression<Int>.random())
+        assertSQL("random()", SQLiteSwift.Expression<Int64>.random())
+        assertSQL("random()", SQLiteSwift.Expression<Int>.random())
     }
 
     func test_length_wrapsStringExpressionWithLengthFunction() {

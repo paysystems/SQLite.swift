@@ -1,5 +1,5 @@
 import XCTest
-@testable import SQLite
+@testable import SQLiteSwift
 
 class SchemaChangerTests: SQLiteTestCase {
     var schemaChanger: SchemaChanger!
@@ -92,7 +92,7 @@ class SchemaChangerTests: SQLiteTestCase {
     }
 
     func test_add_column() throws {
-        let column = Expression<String>("new_column")
+        let column = SQLiteSwift.Expression<String>("new_column")
         let newColumn = ColumnDefinition(name: "new_column",
                                          type: .TEXT,
                                          nullable: true,

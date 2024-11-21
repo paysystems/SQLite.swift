@@ -1,4 +1,4 @@
-import SQLite
+import SQLiteSwift
 
 /// Create an in-memory database
 let db = try Connection(.inMemory)
@@ -9,9 +9,9 @@ db.trace { print($0) }
 /// define a "users" table with some fields
 let users = Table("users")
 
-let id = Expression<Int64>("id")
-let email = Expression<String>("email") // non-null
-let name = Expression<String?>("name")  // nullable
+let id = SQLiteSwift.Expression<Int64>("id")
+let email = SQLiteSwift.Expression<String>("email") // non-null
+let name = SQLiteSwift.Expression<String?>("name")  // nullable
 
 /// prepare the query
 let statement = users.create { t in
@@ -68,8 +68,8 @@ do {
 /// define a virtual table for the FTS index
 let emails = VirtualTable("emails")
 
-let subject = Expression<String>("subject")
-let body = Expression<String?>("body")
+let subject = SQLiteSwift.Expression<String>("subject")
+let body = SQLiteSwift.Expression<String?>("body")
 
 /// create the index
 try db.run(emails.create(.FTS5(
@@ -123,8 +123,8 @@ try schemaChanger.alter(table: "users") { table in
 let changedColumns = try schema.columnDefinitions(table: "users")
 print(changedColumns)
 
-let age = Expression<Int?>("age")
-let electronicMail = Expression<String>("electronic_mail")
+let age = SQLiteSwift.Expression<Int?>("age")
+let electronicMail = SQLiteSwift.Expression<String>("electronic_mail")
 
 let newRowid = try db.run(users.insert(
     electronicMail <- "carol@mac.com",

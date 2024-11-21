@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/paysystems/SQLite.swift.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/stephencelis'
 
-  s.module_name      = 'SQLite'
+  s.module_name      = 'SQLiteSwift'
   s.default_subspec  = 'standard'
   s.swift_versions = ['5']
 

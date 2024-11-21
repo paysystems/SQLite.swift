@@ -1,5 +1,5 @@
 import XCTest
-@testable import SQLite
+@testable import SQLiteSwift
 
 class SchemaReaderTests: SQLiteTestCase {
     private var schemaReader: SchemaReader!
@@ -158,12 +158,12 @@ class SchemaReaderTests: SQLiteTestCase {
     func test_foreignKeys() throws {
         let linkTable = Table("test_links")
 
-        let idColumn = SQLite.Expression<Int64>("id")
-        let testIdColumn = SQLite.Expression<Int64>("test_id")
+        let idColumn = SQLiteSwift.Expression<Int64>("id")
+        let testIdColumn = SQLiteSwift.Expression<Int64>("test_id")
 
         try db.run(linkTable.create(block: { definition in
             definition.column(idColumn, primaryKey: .autoincrement)
-            definition.column(testIdColumn, unique: false, check: nil, references: users, Expression<Int64>("id"))
+            definition.column(testIdColumn, unique: false, check: nil, references: users, SQLiteSwift.Expression<Int64>("id"))
         }))
 
         let foreignKeys = try schemaReader.foreignKeys(table: "test_links")
@@ -238,7 +238,7 @@ class SchemaReaderTests: SQLiteTestCase {
     }
 
     func test_objectDefinitions_indexes() throws {
-        let emailIndex = users.createIndex(Expression<String>("email"), unique: false, ifNotExists: true)
+        let emailIndex = users.createIndex(SQLiteSwift.Expression<String>("email"), unique: false, ifNotExists: true)
         try db.run(emailIndex)
 
         let indexes = try schemaReader.objectDefinitions(type: .index)
