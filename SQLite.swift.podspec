@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SQLite.swift"
-  s.version          = "2.1.0-bip"
+  s.version          = "0.15.3-bip"
   s.summary          = "A type-safe, Swift-language layer over SQLite3 for iOS and macOS."
 
   s.description      = <<-DESC
