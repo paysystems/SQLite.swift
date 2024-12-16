@@ -6,7 +6,7 @@ additions and Pull Requests, as well as to keep the Issues list clear of
 enhancement requests so that bugs are more visible.
 
 > ⚠ This document is currently not actively maintained. See
-> the [0.13.0 milestone](https://github.com/stephencelis/SQLite.swift/issues?q=is%3Aopen+is%3Aissue+milestone%3A0.13.0)
+> the [0.14.1 milestone](https://github.com/stephencelis/SQLite.swift/issues?q=is%3Aopen+is%3Aissue+milestone%3A0.14.1)
 > on Github for additional information about planned features for the next release.
 
 ## Roadmap
@@ -21,8 +21,6 @@ be referred to when it comes time to add the corresponding feature._
 
 ### Features
 
- * encapsulate ATTACH DATABASE / DETACH DATABASE as methods, per
-   [#30](https://github.com/stephencelis/SQLite.swift/issues/30)
  * provide separate threads for update vs read, so updates don't block reads,
    per [#236](https://github.com/stephencelis/SQLite.swift/issues/236)
  * expose triggers, per
@@ -33,6 +31,3 @@ be referred to when it comes time to add the corresponding feature._
 _Features that are not actively being considered, perhaps because of no clean
 type-safe way to implement them with the current Swift, or bugs, or just
 general uncertainty._
-
- * provide a mechanism for INSERT INTO multiple values, per
-   [#168](https://github.com/stephencelis/SQLite.swift/issues/168)

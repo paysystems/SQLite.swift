@@ -32,19 +32,20 @@ import CSQLite
 import SQLite3
 #endif
 
-public typealias Star = (Expression<Binding>?, Expression<Binding>?) -> Expression<Void>
+public typealias Star = (SQLiteSwift.Expression<Binding>?, SQLiteSwift.Expression<Binding>?) -> SQLiteSwift.Expression<Void>
 
-public func *(_: Expression<Binding>?, _: Expression<Binding>?) -> Expression<Void> {
-    return Expression(literal: "*")
+public func *(_: SQLiteSwift.Expression<Binding>?, _: SQLiteSwift.Expression<Binding>?) -> SQLiteSwift.Expression<Void> {
+    SQLiteSwift.Expression(literal: "*")
 }
 
+// swiftlint:disable:next type_name
 public protocol _OptionalType {
 
     associatedtype WrappedType
 
 }
 
-extension Optional : _OptionalType {
+extension Optional: _OptionalType {
 
     public typealias WrappedType = Wrapped
 
@@ -54,12 +55,17 @@ extension Optional : _OptionalType {
 let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 extension String {
-
     func quote(_ mark: Character = "\"") -> String {
-        let escaped = reduce("") { string, character in
-            string + (character == mark ? "\(mark)\(mark)" : "\(character)")
+        var quoted = ""
+        quoted.append(mark)
+        for character in self {
+            quoted.append(character)
+            if character == mark {
+                quoted.append(character)
+            }
         }
-        return "\(mark)\(escaped)\(mark)"
+        quoted.append(mark)
+        return quoted
     }
 
     func join(_ expressions: [Expressible]) -> Expressible {
@@ -69,11 +75,15 @@ extension String {
             template.append(expression.template)
             bindings.append(contentsOf: expression.bindings)
         }
-        return Expression<Void>(template.joined(separator: self), bindings)
+        return SQLiteSwift.Expression<Void>(template.joined(separator: self), bindings)
     }
 
-    func infix<T>(_ lhs: Expressible, _ rhs: Expressible, wrap: Bool = true) -> Expression<T> {
-        let expression = Expression<T>(" \(self) ".join([lhs, rhs]).expression)
+    func infix<T>(_ lhs: Expressible, _ rhs: Expressible, wrap: Bool = true) -> SQLiteSwift.Expression<T> {
+        infix([lhs, rhs], wrap: wrap)
+    }
+
+    func infix<T>(_ terms: [Expressible], wrap: Bool = true) -> SQLiteSwift.Expression<T> {
+        let expression = SQLiteSwift.Expression<T>(" \(self) ".join(terms).expression)
         guard wrap else {
             return expression
         }
@@ -81,25 +91,25 @@ extension String {
     }
 
     func prefix(_ expressions: Expressible) -> Expressible {
-        return "\(self) ".wrap(expressions) as Expression<Void>
+        "\(self) ".wrap(expressions) as SQLiteSwift.Expression<Void>
     }
 
     func prefix(_ expressions: [Expressible]) -> Expressible {
-        return "\(self) ".wrap(expressions) as Expression<Void>
+        "\(self) ".wrap(expressions) as SQLiteSwift.Expression<Void>
     }
 
-    func wrap<T>(_ expression: Expressible) -> Expression<T> {
-        return Expression("\(self)(\(expression.expression.template))", expression.expression.bindings)
+    func wrap<T>(_ expression: Expressible) -> SQLiteSwift.Expression<T> {
+        SQLiteSwift.Expression("\(self)(\(expression.expression.template))", expression.expression.bindings)
     }
 
-    func wrap<T>(_ expressions: [Expressible]) -> Expression<T> {
-        return wrap(", ".join(expressions))
+    func wrap<T>(_ expressions: [Expressible]) -> SQLiteSwift.Expression<T> {
+        wrap(", ".join(expressions))
     }
 
 }
 
 func transcode(_ literal: Binding?) -> String {
-    guard let literal = literal else { return "NULL" }
+    guard let literal else { return "NULL" }
 
     switch literal {
     case let blob as Blob:
@@ -111,10 +121,11 @@ func transcode(_ literal: Binding?) -> String {
     }
 }
 
-func value<A: Value>(_ v: Binding) -> A {
-    return A.fromDatatypeValue(v as! A.Datatype) as! A
+// swiftlint:disable force_cast force_try
+func value<A: Value>(_ binding: Binding) -> A {
+    try! A.fromDatatypeValue(binding as! A.Datatype) as! A
 }
 
-func value<A: Value>(_ v: Binding?) -> A {
-    return value(v!)
+func value<A: Value>(_ binding: Binding?) -> A {
+    value(binding!)
 }
