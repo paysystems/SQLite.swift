@@ -19,6 +19,7 @@ let package = Package(
     targets: [
         .target(
             name: "SQLiteSwift",
+            path: "Sources/SQLite",
             exclude: [
                 "SQLite/Info.plist"
             ]
